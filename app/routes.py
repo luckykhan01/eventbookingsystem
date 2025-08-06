@@ -2,8 +2,8 @@ from app import app, db
 from flask import url_for, redirect, render_template, flash, request
 from flask_login import current_user, login_user, logout_user, current_user, login_required
 import sqlalchemy as sa
-from app.models import User
-from app.forms import LoginForm, RegistrationForm
+from app.models import User, Event
+from app.forms import LoginForm, RegistrationForm, CreationForm
 from urllib.parse import urlsplit
 
 @app.route('/')
@@ -62,5 +62,13 @@ def create_event():
         db.session.add(event)
         db.session.commit()
         flash('Congratulations, your event was successfully added!')
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('events'))
+    else:
+        print("Validation Failed")
+        print(form.errors)
     return render_template('create_event.html', title='Create an event', form=form)
+
+@app.route('/events')
+def events():
+    events = Event.query.all()
+    return render_template('events.html', events=events)

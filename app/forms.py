@@ -34,7 +34,7 @@ class RegistrationForm(FlaskForm):
 class CreationForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = StringField('Description', validators=[DataRequired()])
-    date = DateField('Event Date', format='%d-%m-%Y', validators=[DataRequired()])
+    date = DateField('Event Date', format='%Y-%m-%d', validators=[DataRequired()])
     location = StringField('Location', validators=[DataRequired()])
     total_seats = IntegerField('Total Seats', validators=[DataRequired(), NumberRange(min=1)])
     submit = SubmitField('Add')
