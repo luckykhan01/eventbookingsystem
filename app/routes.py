@@ -46,3 +46,21 @@ def register():
         flash('Congratulations! You are now registered.')
         return redirect(url_for('login'))
     return render_template('register.html', title='Registration', form=form)
+
+@app.route('/create_event', methods=['GET', 'POST'])
+@login_required
+def create_event():
+    form = CreationForm()
+    if form.validate_on_submit():
+        event = Event(title=form.title.data,
+                      description=form.description.data,
+                      date=form.date.data,
+                      location=form.location.data,
+                      total_seats=form.total_seats.data,
+                      seats_left=form.total_seats.data,
+                      created_by=current_user.username)
+        db.session.add(event)
+        db.session.commit()
+        flash('Congratulations, your event was successfully added!')
+        return redirect(url_for('dashboard'))
+    return render_template('create_event.html', title='Create an event', form=form)

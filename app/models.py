@@ -4,6 +4,7 @@ import sqlalchemy.orm as so
 from app import db, login
 from flask_login import UserMixin, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
+import datetime
 
 
 class User(UserMixin, db.Model):
@@ -24,4 +25,15 @@ class User(UserMixin, db.Model):
 @login.user_loader
 def load_user(id):
     return db.session.get(User, int(id))
+
+
+class Event(db.Model):
+    event_id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    title: so.Mapped[str] = so.mapped_column(sa.String(128), index=True, unique=True)
+    description: so.Mapped[str] = so.mapped_column(sa.String(256), index=True)
+    date: so.Mapped[datetime.date] = so.mapped_column(sa.Date)
+    location: so.Mapped[str] = so.mapped_column(sa.String(30))
+    total_seats: so.Mapped[int] = so.mapped_column()
+    seats_left: so.Mapped[int] = so.mapped_column()
+    created_by: so.Mapped[str] = so.mapped_column(sa.String(64))
 

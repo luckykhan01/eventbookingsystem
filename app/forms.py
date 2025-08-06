@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, IntegerField
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, NumberRange
 import sqlalchemy as sa
 from app import db
 from app.models import User
@@ -8,7 +8,7 @@ from app.models import User
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
-    password = StringField('Password', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
@@ -16,8 +16,8 @@ class LoginForm(FlaskForm):
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = StringField('Password', validators=[DataRequired()])
-    password2 = StringField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
     def validate_username(self, username):
@@ -29,3 +29,12 @@ class RegistrationForm(FlaskForm):
         user = db.session.scalar(sa.select(User).where(User.email == email.data))
         if user is not None:
             raise ValidationError('Please use a different email address.')
+
+
+class CreationForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    description = StringField('Description', validators=[DataRequired()])
+    date = DateField('Event Date', format='%d-%m-%Y', validators=[DataRequired()])
+    location = StringField('Location', validators=[DataRequired()])
+    total_seats = IntegerField('Total Seats', validators=[DataRequired(), NumberRange(min=1)])
+    submit = SubmitField('Add')
