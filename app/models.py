@@ -12,6 +12,7 @@ class User(UserMixin, db.Model):
     username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True, unique=True)
     email: so.Mapped[str] = so.mapped_column(sa.String(64), index=True, unique=True)
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
+    role: so.Mapped[str] = so.mapped_column(sa.String(20), nullable=False, default='user')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)

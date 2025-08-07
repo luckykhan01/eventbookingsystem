@@ -16,6 +16,9 @@
             {% else %}
             <a href="{{ url_for('logout') }}">Logout</a>
             {% endif %}
+            {% if current_user.is_authenticated and current_user.role == 'admin' %}
+                <a href="{{ url_for('create_event') }}">Create Event</a>
+            {% endif %}
         </div>
         <hr>
         {% with messages = get_flashed_messages() %}

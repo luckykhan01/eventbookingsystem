@@ -5,6 +5,7 @@ import sqlalchemy as sa
 from app.models import User, Event
 from app.forms import LoginForm, RegistrationForm, CreationForm
 from urllib.parse import urlsplit
+from app.utils import admin_required
 
 @app.route('/')
 @app.route('/index')
@@ -49,6 +50,7 @@ def register():
 
 @app.route('/create_event', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def create_event():
     form = CreationForm()
     if form.validate_on_submit():
