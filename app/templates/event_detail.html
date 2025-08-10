@@ -15,11 +15,11 @@
 {#        </a>#}
 {#    </p>#}
 
-    {% if prev_event_id %}
-        <a href="{{ url_for('event_detail', event_id=prev_event_id) }}">← Previous Event</a>
-    {% endif %}
-
-    {% if next_event_id %}
-        <a href="{{ url_for('event_detail', event_id=next_event_id) }}" style="margin-left: 10px;">Next Event →</a>
-    {% endif %}
+{#    {% if prev_event_id %}#}
+{#        <a href="{{ url_for('event_detail', event_id=prev_event_id) }}">← Previous Event</a>#}
+{#    {% endif %}#}
+{##}
+{#    {% if next_event_id %}#}
+{#        <a href="{{ url_for('event_detail', event_id=next_event_id) }}" style="margin-left: 10px;">Next Event →</a>#}
+{#    {% endif %}#}
 {% endblock %}
