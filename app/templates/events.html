@@ -4,7 +4,12 @@
     <h2>All Events</h2>
     <ul>
     {% for event in events %}
-        <li>{{ event.title }} — {{ event.date }} — {{ event.location }}</li>
+    <h2>
+        <a href="{{ url_for('event_detail', event_id=event.event_id) }}">
+            {{ event.title }}
+        </a>
+    </h2>
+    <p>{{ event.date }} — {{ event.location }}</p>
     {% endfor %}
     </ul>
 {% endblock %}

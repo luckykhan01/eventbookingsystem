@@ -74,3 +74,8 @@ def create_event():
 def events():
     events = Event.query.all()
     return render_template('events.html', events=events)
+
+@app.route('/event/<int:event_id>')
+def event_detail(event_id):
+    event = Event.query.get_or_404(event_id)
+    return render_template('event_detail.html', event=event)

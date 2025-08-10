@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <p><a href="{{ url_for('events') }}">← Back to All Events</a></p>
+
+    <h1>{{ event.title }}</h1>
+    <p><strong>Date:</strong> {{ event.date }}</p>
+    <p><strong>Location:</strong> {{ event.location }}</p>
+    <hr>
+    <p>{{ event.description }}</p>
+
+{#    <p>#}
+{#        <a href="{{ url_for('book_event', event_id=event.id) }}">#}
+{#            Book This Event#}
+{#        </a>#}
+{#    </p>#}
+
+    {% if prev_event_id %}
+        <a href="{{ url_for('event_detail', event_id=prev_event_id) }}">← Previous Event</a>
+    {% endif %}
+
+    {% if next_event_id %}
+        <a href="{{ url_for('event_detail', event_id=next_event_id) }}" style="margin-left: 10px;">Next Event →</a>
+    {% endif %}
+{% endblock %}
