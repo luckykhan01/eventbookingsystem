@@ -4,7 +4,7 @@ import sqlalchemy.orm as so
 from app import db, login
 from flask_login import UserMixin, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
-import datetime
+from datetime import datetime, timezone
 
 
 class User(UserMixin, db.Model):
@@ -13,6 +13,9 @@ class User(UserMixin, db.Model):
     email: so.Mapped[str] = so.mapped_column(sa.String(64), index=True, unique=True)
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
     role: so.Mapped[str] = so.mapped_column(sa.String(20), nullable=False, default='user')
+
+    bookings: so.Mapped[list["Booking"]] = so.relationship(back_populates="user",
+                                                  cascade='all, delete-orphan')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -38,3 +41,21 @@ class Event(db.Model):
     seats_left: so.Mapped[int] = so.mapped_column()
     created_by: so.Mapped[str] = so.mapped_column(sa.String(64))
 
+    bookings: so.Mapped[list["Booking"]] = so.relationship(back_populates="event",
+                                                           cascade="all, delete-orphan")
+
+    def __repr__(self):
+        return '<Event {}>'.format(self.title)
+
+
+class Booking(db.Model):
+    booking_id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('user.id'))
+    event_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('event.event_id'))
+    booked_at: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
+
+    user: so.Mapped["User"] = so.relationship(back_populates="bookings")
+    event: so.Mapped["Event"] = so.relationship(back_populates="bookings")
+
+    def __repr__(self):
+        return '<User: {} Booking: {}>'.format(self.user_id, self.booking_id)

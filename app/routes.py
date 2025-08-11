@@ -2,7 +2,7 @@ from app import app, db
 from flask import url_for, redirect, render_template, flash, request
 from flask_login import current_user, login_user, logout_user, current_user, login_required
 import sqlalchemy as sa
-from app.models import User, Event
+from app.models import User, Event, Booking
 from app.forms import LoginForm, RegistrationForm, CreationForm
 from urllib.parse import urlsplit
 from app.utils import admin_required
@@ -79,3 +79,23 @@ def events():
 def event_detail(event_id):
     event = Event.query.get_or_404(event_id)
     return render_template('event_detail.html', event=event)
+
+@app.route('/book_event/<int:event_id>', methods=["POST"])
+@login_required
+def book_event(event_id):
+    event = Event.query.get_or_404(event_id)
+
+    existing_booking = Booking.query.filter_by(user_id=current_user.id,
+                                               event_id=event_id).first()
+
+    if existing_booking:
+        flash('You already booked this event.', 'warning')
+        return redirect(url_for('event_detail', event_id=event_id))
+
+    new_booking = Booking(user_id=current_user.id, event_id=event_id)
+    db.session.add(new_booking)
+    db.session.commit()
+
+    flash('Event booked successfully!')
+
+    return redirect(url_for('event_detail', event_id=event_id))
