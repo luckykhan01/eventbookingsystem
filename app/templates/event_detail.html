@@ -6,14 +6,16 @@
     <h1>{{ event.title }}</h1>
     <p><strong>Date:</strong> {{ event.date }}</p>
     <p><strong>Location:</strong> {{ event.location }}</p>
-    <hr>
     <p>{{ event.description }}</p>
 
-{#    <p>#}
-{#        <a href="{{ url_for('book_event', event_id=event.id) }}">#}
-{#            Book This Event#}
-{#        </a>#}
-{#    </p>#}
+    <hr>
+
+    <!-- Booking form -->
+    <form action="{{ url_for('book_event', event_id=event.event_id) }}" method="post">
+        <button type="submit">Book Event</button>
+    </form>
+
+    <hr>
 
 {#    {% if prev_event_id %}#}
 {#        <a href="{{ url_for('event_detail', event_id=prev_event_id) }}">← Previous Event</a>#}
