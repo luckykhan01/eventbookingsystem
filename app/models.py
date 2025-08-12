@@ -38,7 +38,7 @@ class Event(db.Model):
     date: so.Mapped[datetime.date] = so.mapped_column(sa.Date)
     location: so.Mapped[str] = so.mapped_column(sa.String(30))
     total_seats: so.Mapped[int] = so.mapped_column()
-    seats_left: so.Mapped[int] = so.mapped_column()
+    seats_left: so.Mapped[int] = so.mapped_column(default=0)
     created_by: so.Mapped[str] = so.mapped_column(sa.String(64))
 
     bookings: so.Mapped[list["Booking"]] = so.relationship(back_populates="event",

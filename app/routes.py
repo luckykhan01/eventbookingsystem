@@ -92,10 +92,32 @@ def book_event(event_id):
         flash('You already booked this event.', 'warning')
         return redirect(url_for('event_detail', event_id=event_id))
 
+    if event.seats_left <= 0:
+        flash('Sorry, no seats are left for this event', 'warning')
+        return redirect(url_for('event_detail', event_id=event_id))
+
     new_booking = Booking(user_id=current_user.id, event_id=event_id)
     db.session.add(new_booking)
     db.session.commit()
 
+    event.seats_left -= 1
+
     flash('Event booked successfully!')
 
     return redirect(url_for('event_detail', event_id=event_id))
+
+@app.route('/cancel_booking/<int:event_id>', methods=['POST'])
+def cancel_booking(event_id):
+    booking = Booking.query.filter_by(
+        user_id=current_user.id, event_id=event_id).first_or_404()
+
+    db.session.delete(booking)
+
+    event = Event.query.get_or_404()
+    event.seats_left += 1
+
+    db.session.commit()
+
+    flash('Your booking has been cancelled.', 'success')
+
+    return render_template(url_for('event_detail'), event_id=event_id)
