@@ -130,3 +130,13 @@ def cancel_booking(event_id):
 def my_bookings():
     my_events = Event.query.join(Booking).filter(Booking.user_id == current_user.id).all()
     return render_template('my_bookings.html', events=my_events)
+
+@app.route('/adm_db')
+@login_required
+@admin_required
+def admin_dashboard():
+    bookings = (
+        db.session.query(Booking).join(User, Booking.user_id == User.id).
+        join(Event, Booking.event_id == Event.event_id).all()
+    )
+    return render_template('admin_dashboard.html', bookings=bookings)

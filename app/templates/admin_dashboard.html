@@ -1,0 +1,17 @@
+<h1>Admin Dashboard - Booked Events</h1>
+<table>
+    <tr>
+        <th>Event Name</th>
+        <th>User Name</th>
+        <th>User Email</th>
+        <th>Booking Date</th>
+    </tr>
+    {% for booking in bookings %}
+    <tr>
+        <td>{{ booking.event.title }}</td>
+        <td>{{ booking.user.username }}</td>
+        <td>{{ booking.user.email }}</td>
+        <td>{{ booking.booked_at.strftime('%Y-%m-%d') if booking.booked_at else '' }}</td>
+    </tr>
+    {% endfor %}
+</table>
