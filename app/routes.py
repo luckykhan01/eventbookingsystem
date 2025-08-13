@@ -124,3 +124,9 @@ def cancel_booking(event_id):
     flash('Your booking has been cancelled.', 'success')
 
     return redirect(url_for('event_detail', event_id=event_id))
+
+@app.route('/my_bookings')
+@login_required
+def my_bookings():
+    my_events = Event.query.join(Booking).filter(Booking.user_id == current_user.id).all()
+    return render_template('my_bookings.html', events=my_events)

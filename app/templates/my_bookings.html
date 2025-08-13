@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>My Bookings</h2>
+    <ul>
+    {% for event in events %}
+        <li>
+            <h2>
+                <a href="{{ url_for('event_detail', event_id=event.event_id) }}">
+                    {{ event.title }}
+                </a>
+            </h2>
+            <p>{{ event.date }} — {{ event.location }}</p>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}
