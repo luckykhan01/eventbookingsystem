@@ -8,14 +8,16 @@
     <p><strong>Location:</strong> {{ event.location }}</p>
     <p>{{ event.description }}</p>
 
-    <hr>
-
-    <!-- Booking form -->
+    {% if is_booked %}
+    <form action="{{ url_for('cancel_booking', event_id=event.event_id) }}" method="post">
+        <button type="submit">Cancel Booking</button>
+    </form>
+    {% else %}
     <form action="{{ url_for('book_event', event_id=event.event_id) }}" method="post">
         <button type="submit">Book Event</button>
     </form>
-
-    <hr>
+    {% endif %}
+    <p>Seats left: {{ event.seats_left }}</p>
 
 {#    {% if prev_event_id %}#}
 {#        <a href="{{ url_for('event_detail', event_id=prev_event_id) }}">← Previous Event</a>#}
