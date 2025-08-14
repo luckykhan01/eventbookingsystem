@@ -1,25 +1,49 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Sign In</h1>
+<div class="max-w-md mx-auto bg-white rounded-2xl shadow-sm p-8 mt-10"> <!-- Card Container -->
+    <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Sign In</h1>
+
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
+
+        <!-- Username field -->
+        <div class="mb-5">
+            {{ form.username.label(class="block text-sm font-medium text-gray-600 mb-1") }}
+            <!-- Rounded input -->
+            {{ form.username(size=32, class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent") }}
+            <!-- Error -->
             {% for error in form.username.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+            <p class="mt-1 text-red-500 text-xs italic">{{ error }}</p>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
+        </div>
+
+        <!-- Password field -->
+        <div class="mb-5">
+            {{ form.password.label(class="block text-sm font-medium text-gray-600 mb-1") }}
+            <!-- Rounded input -->
+            {{ form.password(size=32, class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent") }}
+            <!-- Error -->
             {% for error in form.password.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+            <p class="mt-1 text-red-500 text-xs italic">{{ error }}</p>
             {% endfor %}
-        </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <p>{{ form.submit() }}</p>
+        </div>
+
+        <!-- Remember me -->
+        <div class="flex items-center mb-4">
+            {{ form.remember_me(class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500") }}
+            {{ form.remember_me.label(class="ml-2 block text-sm text-gray-700") }}
+        </div>
+
+        <!-- Submit -->
+        <div class="mb-4">
+             {{ form.submit(class="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white font-medium rounded-full transition ease-in-out duration-150 cursor-pointer") }}
+        </div>
     </form>
-    <p>New User? <a href="{{ url_for('register') }}">Click to Register!</a></p>
+
+    <!-- Register link -->
+    <div class="text-center text-sm text-gray-500">
+        New User? <a href="{{ url_for('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">Click to Register!</a>
+    </div>
+</div>
 {% endblock %}

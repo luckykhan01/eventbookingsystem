@@ -1,36 +1,63 @@
 <!doctype html>
-<html>
-    <head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>
         {% if title %}
-        <title>{{ title }} - Microblog</title>
+            {{ title }} - eBooking
         {% else %}
-        <title>Welcome to Microblog</title>
+            Event Booking System
         {% endif %}
-    </head>
-    <body>
-        <div>
-            Microblog:
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('events') }}">Events</a>
+    </title>
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
+
+    <!-- NavBar -->
+    <nav class="bg-white shadow-md py-4 px-6 flex flex-col md:flex-row items-center justify-between">
+        <div class="text-xl font-bold text-indigo-600 mb-2 md:mb-0">eBooking</div>
+        <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
+            <a href="{{ url_for('index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200 transition duration-150 ease-in-out">Home</a>
+            <a href="{{ url_for('events') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200 transition duration-150 ease-in-out">Events</a>
+
             {% if current_user.is_anonymous %}
-            <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('login') }}" class="px-3 py-2 rounded-md text-sm font-medium text-indigo-600 hover:bg-indigo-100 transition duration-150 ease-in-out">Login</a>
             {% else %}
-            <a href="{{ url_for('logout') }}">Logout</a>
+                <a href="{{ url_for('logout') }}" class="px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:bg-red-100 transition duration-150 ease-in-out">Logout</a>
             {% endif %}
+
             {% if current_user.is_authenticated and current_user.role == 'admin' %}
-                <a href="{{ url_for('create_event') }}">Create Event</a>
+                <a href="{{ url_for('create_event') }}" class="px-3 py-2 rounded-md text-sm font-medium text-green-600 hover:bg-green-100 transition duration-150 ease-in-out">Create Event</a>
             {% endif %}
         </div>
-        <hr>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto py-8">
+        <!-- Flash messages -->
         {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+            {% if messages %}
+                <div class="mb-6 px-4"> <!-- Add px-4 here for messages if needed -->
+                    {% for message in messages %}
+                        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-2" role="alert">
+                            <p>{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         {% endwith %}
+
         {% block content %}{% endblock %}
-    </body>
+
+    </main>
+
+    <!-- Footer -->
+    <!--
+    <footer class="bg-white border-t py-4 text-center text-sm text-gray-500">
+        &copy; 2025 luckykhan01
+    </footer>
+    -->
+
+</body>
 </html>
