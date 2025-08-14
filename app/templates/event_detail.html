@@ -1,29 +1,79 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <p><a href="{{ url_for('events') }}">← Back to All Events</a></p>
+<div class="max-w-3xl mx-auto px-4 py-6">
+    <!-- go back -->
+    <a href="{{ url_for('events') }}"
+       class="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 mb-6 transition-colors duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to All Events
+    </a>
 
-    <h1>{{ event.title }}</h1>
-    <p><strong>Date:</strong> {{ event.date }}</p>
-    <p><strong>Location:</strong> {{ event.location }}</p>
-    <p>{{ event.description }}</p>
+    <!-- Event card -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">{{ event.title }}</h1>
 
-    {% if is_booked %}
-    <form action="{{ url_for('cancel_booking', event_id=event.event_id) }}" method="post">
-        <button type="submit">Cancel Booking</button>
-    </form>
-    {% else %}
-    <form action="{{ url_for('book_event', event_id=event.event_id) }}" method="post">
-        <button type="submit">Book Event</button>
-    </form>
-    {% endif %}
-    <p>Seats left: {{ event.seats_left }}</p>
+            <div class="flex flex-col sm:flex-row sm:items-center text-gray-600 text-sm mb-6 space-y-2 sm:space-y-0 sm:space-x-6">
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>{{ event.date.strftime('%B %d, %Y at %I:%M %p') if event.date else 'Date/Time TBD' }}</span>
+                </div>
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span>{{ event.location or 'Location TBD' }}</span>
+                </div>
+            </div>
 
-{#    {% if prev_event_id %}#}
-{#        <a href="{{ url_for('event_detail', event_id=prev_event_id) }}">← Previous Event</a>#}
-{#    {% endif %}#}
-{##}
-{#    {% if next_event_id %}#}
-{#        <a href="{{ url_for('event_detail', event_id=next_event_id) }}" style="margin-left: 10px;">Next Event →</a>#}
-{#    {% endif %}#}
+            {% if event.description %}
+            <div class="prose prose-indigo max-w-none mb-6">
+                <p class="text-gray-700">{{ event.description }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Action -->
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 border-t border-gray-100">
+                <div class="mb-4 sm:mb-0">
+                    <span class="text-sm font-medium text-gray-900">Seats left:</span>
+                    <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {% if event.seats_left > 5 %}bg-green-100 text-green-800 {% elif event.seats_left > 0 %}bg-yellow-100 text-yellow-800 {% else %}bg-red-100 text-red-800 {% endif %}">
+                        {{ event.seats_left }}
+                    </span>
+                </div>
+
+                <div>
+                    {% if is_booked %}
+                        <form action="{{ url_for('cancel_booking', event_id=event.event_id) }}" method="post">
+                            <button type="submit"
+                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200">
+                                Cancel Booking
+                            </button>
+                        </form>
+                    {% else %}
+                        {% if event.seats_left > 0 %}
+                            <form action="{{ url_for('book_event', event_id=event.event_id) }}" method="post">
+                                <button type="submit"
+                                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                                    Book Event
+                                </button>
+                            </form>
+                        {% else %}
+                             <button type="button" disabled
+                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gray-400 cursor-not-allowed">
+                                    Event Full
+                            </button>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 {% endblock %}
