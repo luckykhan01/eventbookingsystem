@@ -65,9 +65,6 @@ def create_event():
         db.session.commit()
         flash('Congratulations, your event was successfully added!')
         return redirect(url_for('events'))
-    else:
-        print("Validation Failed")
-        print(form.errors)
     return render_template('create_event.html', title='Create an event', form=form)
 
 @app.route('/events')

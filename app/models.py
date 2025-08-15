@@ -36,6 +36,7 @@ class Event(db.Model):
     title: so.Mapped[str] = so.mapped_column(sa.String(128), index=True, unique=True)
     description: so.Mapped[str] = so.mapped_column(sa.String(256), index=True)
     date: so.Mapped[datetime.date] = so.mapped_column(sa.Date)
+    time: so.Mapped[datetime.time] = so.mapped_column(sa.Time, nullable=False)
     location: so.Mapped[str] = so.mapped_column(sa.String(30))
     total_seats: so.Mapped[int] = so.mapped_column()
     seats_left: so.Mapped[int] = so.mapped_column(default=0)

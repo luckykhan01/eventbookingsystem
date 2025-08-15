@@ -1,8 +1,56 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
-    {% for post in posts %}
-    <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
-    {% endfor %}
+    <!-- Hero Section -->
+    <div class="text-center py-16 md:py-24 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Discover Amazing Events</h1>
+        <p class="text-xl mb-8 max-w-2xl mx-auto">Find concerts, workshops, conferences, and more happening near you.</p>
+        <a href="{{ url_for('events') }}" class="inline-block bg-white text-indigo-600 font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-gray-100 transition duration-300">
+            Browse All Events
+        </a>
+    </div>
+
+    <!-- Featured Events Section -->
+    <div class="mb-16">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Featured Events</h2>
+        {% if featured_events %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for event in featured_events %}
+            <!-- Event Card (similar to your events list) -->
+            <a href="{{ url_for('event_detail', event_id=event.event_id) }}" class="block bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out overflow-hidden border border-gray-200">
+                <div class="p-5">
+                    <h3 class="text-xl font-semibold text-indigo-600 hover:text-indigo-800 transition-colors duration-200 mb-2">
+                        {{ event.title }}
+                    </h3>
+                    <div class="flex items-center text-gray-600 text-sm mt-3">
+                        <svg ... ></svg> <!-- Calendar Icon -->
+                        <span>{{ event.date.strftime('%B %d, %Y') }}</span>
+                    </div>
+                    <div class="flex items-center text-gray-600 text-sm mt-1">
+                        <svg ... ></svg> <!-- Location Icon -->
+                        <span>{{ event.location }}</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-8">
+            <a href="{{ url_for('events') }}" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+                See All Upcoming Events
+                <svg ... class="ml-1 h-4 w-4"></svg> <!-- Arrow Icon -->
+            </a>
+        </div>
+        {% else %}
+        <p class="text-center text-gray-500">No featured events available at the moment. Check back soon!</p>
+        {% endif %}
+    </div>
+
+    <!-- Brief Intro Section -->
+    <div class="bg-gray-50 rounded-xl p-8 mb-12 text-center">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Why Choose eBooking?</h2>
+        <p class="text-gray-700 max-w-3xl mx-auto">
+            We make it easy to discover and book exciting events in your area. Whether you're looking for entertainment,
+            learning opportunities, or networking, eBooking connects you with experiences that matter.
+        </p>
+    </div>
 {% endblock %}

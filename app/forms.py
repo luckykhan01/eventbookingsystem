@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, IntegerField, TimeField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, NumberRange
 import sqlalchemy as sa
 from app import db
@@ -34,7 +34,8 @@ class RegistrationForm(FlaskForm):
 class CreationForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = StringField('Description', validators=[DataRequired()])
-    date = DateField('Event Date', format='%Y-%m-%d', validators=[DataRequired()])
+    date = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
+    time = TimeField('Time', format='%H:%M', validators=[DataRequired()])
     location = StringField('Location', validators=[DataRequired()])
     total_seats = IntegerField('Total Seats', validators=[DataRequired(), NumberRange(min=1)])
     submit = SubmitField('Add')
