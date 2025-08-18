@@ -1,16 +1,60 @@
-<h2>Search results for "{{ query }}"</h2>
+{% extends 'base.html' %}
 
-{% if events %}
-  <ul>
-    {% for event in events %}
-      <li>
-        <h3>{{ event.title }}</h3>
-        <p>{{ event.description }}</p>
-        <p><b>Location:</b> {{ event.location }}</p>
-        <p><b>Date:</b> {{ event.date }}</p>
-      </li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p>No events found.</p>
-{% endif %}
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold text-gray-900 mb-2 text-center">
+        Search Results for <span class="text-indigo-600">"{{ query }}"</span>
+    </h1>
+    <p class="text-gray-600 text-center mb-8">
+        {% if events %}
+            Found {{ events | length }} event{{ 's' if events | length != 1 else '' }}.
+        {% else %}
+            Please try a different search.
+        {% endif %}
+    </p>
+
+    {% if events %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for event in events %}
+            <a href="{{ url_for('event_detail', event_id=event.event_id) }}"
+               class="block bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out overflow-hidden border border-gray-200">
+                <div class="p-5">
+                    <h2 class="text-xl font-semibold text-indigo-600 hover:text-indigo-800 transition-colors duration-200 mb-3 line-clamp-1">
+                        {{ event.title }}
+                    </h2>
+                    {% if event.description %}
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                        {{ event.description }}
+                    </p>
+                    {% endif %}
+                    <div class="flex items-center text-gray-500 text-xs mt-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span class="truncate">{{ event.location or 'Location TBD' }}</span>
+                    </div>
+                    <div class="flex items-center text-gray-500 text-xs mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>{{ event.date.strftime('%B %d, %Y') if event.date else 'Date TBD' }}</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-16">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3 class="text-lg font-medium text-gray-900 mb-1">No events found</h3>
+            <p class="text-gray-500 max-w-md mx-auto">Your search for "{{ query }}" did not match any events. Try adjusting your search terms.</p>
+            <a href="{{ url_for('events') }}" class="mt-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Browse All Events
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
