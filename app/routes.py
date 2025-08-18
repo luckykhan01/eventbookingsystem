@@ -6,6 +6,7 @@ from app.models import User, Event, Booking
 from app.forms import LoginForm, RegistrationForm, CreationForm
 from urllib.parse import urlsplit
 from app.utils import admin_required
+from sqlalchemy.sql.operators import ilike_op
 
 @app.route('/')
 @app.route('/index')
@@ -137,3 +138,18 @@ def admin_dashboard():
         join(Event, Booking.event_id == Event.event_id).all()
     )
     return render_template('admin_dashboard.html', bookings=bookings)
+
+@app.route('/search')
+def search_events():
+    query = request.args.get('q', '').strip()
+
+    if query:
+        events = Event.query.filter(
+            Event.title.ilike(f"%{query}%") |
+            Event.description.ilike(f"%{query}%")
+        ).all()
+    else:
+        events = []
+
+    return render_template('search_events.html', events=events, query=query)
+

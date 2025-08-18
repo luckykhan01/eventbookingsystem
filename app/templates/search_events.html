@@ -1,0 +1,16 @@
+<h2>Search results for "{{ query }}"</h2>
+
+{% if events %}
+  <ul>
+    {% for event in events %}
+      <li>
+        <h3>{{ event.title }}</h3>
+        <p>{{ event.description }}</p>
+        <p><b>Location:</b> {{ event.location }}</p>
+        <p><b>Date:</b> {{ event.date }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No events found.</p>
+{% endif %}
