@@ -59,6 +59,7 @@ def create_event():
                       description=form.description.data,
                       date=form.date.data,
                       location=form.location.data,
+                      time=form.time.data,
                       total_seats=form.total_seats.data,
                       seats_left=form.total_seats.data,
                       created_by=current_user.username)
