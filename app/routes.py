@@ -153,3 +153,15 @@ def search_events():
 
     return render_template('search_events.html', events=events, query=query)
 
+@app.route('/delete_event/<int:event_id>', methods=['POST'])
+def delete_event(event_id):
+    event = Event.query.filter_by(event_id=event_id).first_or_404()
+
+    db.session.delete(event)
+    db.session.commit()
+    flash('Event successfully has been deleted.')
+
+    return redirect(url_for('events'))
+
+
+
