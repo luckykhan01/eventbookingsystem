@@ -6,7 +6,6 @@ from app.models import User, Event, Booking
 from app.forms import LoginForm, RegistrationForm, CreationForm
 from urllib.parse import urlsplit
 from app.utils import admin_required
-from sqlalchemy.sql.operators import ilike_op
 
 @app.route('/')
 @app.route('/index')
@@ -27,7 +26,7 @@ def login():
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
-        return redirect(next_page)
+        return redirect(next_page or url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
 
 @app.route('/logout')
