@@ -11,7 +11,8 @@ from app.utils import admin_required
 @app.route('/index')
 @login_required
 def index():
-    return render_template('index.html', title='Homepage')
+    events = Event.query.all()
+    return render_template('index.html', title='Homepage', events=events)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
