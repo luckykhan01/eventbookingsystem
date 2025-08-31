@@ -47,7 +47,19 @@
                     </span>
                 </div>
 
-                <div>
+                <!-- Buttons Container -->
+                <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+                    <!-- Edit Button (admin only) -->
+                    {% if current_user.is_authenticated and current_user.role == 'admin' %}
+                    <form action="{{ url_for('edit_event', event_id=event.event_id) }}" method="get"> <!-- Using GET for navigation -->
+                        <button type="submit"
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                            Edit Event
+                        </button>
+                    </form>
+                    {% endif %}
+
+                    <!-- Cancel Booking -->
                     {% if is_booked %}
                         <form action="{{ url_for('cancel_booking', event_id=event.event_id) }}" method="post">
                             <button type="submit"
@@ -56,6 +68,7 @@
                             </button>
                         </form>
                     {% else %}
+                        <!-- Book Event Button or Event Full -->
                         {% if event.seats_left > 0 %}
                             <form action="{{ url_for('book_event', event_id=event.event_id) }}" method="post">
                                 <button type="submit"
