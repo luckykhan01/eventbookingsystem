@@ -155,6 +155,8 @@ def search_events():
     return render_template('search_events.html', events=events, query=query)
 
 @app.route('/delete_event/<int:event_id>', methods=['POST'])
+@login_required
+@admin_required
 def delete_event(event_id):
     event = Event.query.filter_by(event_id=event_id).first_or_404()
 
@@ -165,4 +167,26 @@ def delete_event(event_id):
     return redirect(url_for('events'))
 
 
+@app.route('/edit_event/<int:event_id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_event(event_id):
+    event = Event.query.filter_by(event_id=event_id).first_or_404()
+    form = CreationForm(obj=event)
 
+    if form.validate_on_submit():
+        event.title = form.title.data
+        event.description = form.description.data
+        event.date = form.date.data,
+        event.location = form.location.data
+        event.time = form.time.data
+        event.total_seats = form.total_seats.data
+        event.seats_left = form.total_seats.data
+        event.created_by = current_user.username
+
+        db.session.commit()
+
+        flash('Your event has been successfully edited!', 'success')
+
+        return redirect(url_for('events'))
+    return render_template('edit_event.html', event_id=event_id, form=form)
