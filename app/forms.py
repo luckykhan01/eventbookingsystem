@@ -39,3 +39,8 @@ class CreationForm(FlaskForm):
     location = StringField('Location', validators=[DataRequired()])
     total_seats = IntegerField('Total Seats', validators=[DataRequired(), NumberRange(min=1)])
     submit = SubmitField('Add')
+
+
+class ResetPasswordRequestForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')

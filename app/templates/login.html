@@ -41,6 +41,11 @@
         </div>
     </form>
 
+    <!-- Forgot Password link -->
+    <div class="text-center text-sm text-gray-500 mb-4">
+        <a href="{{ url_for('reset_password_request') }}" class="font-medium text-indigo-600 hover:text-indigo-500">Forgot Your Password?</a>
+    </div>
+
     <!-- Register link -->
     <div class="text-center text-sm text-gray-500">
         New User? <a href="{{ url_for('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">Click to Register!</a>
