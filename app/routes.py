@@ -3,10 +3,10 @@ from flask import url_for, redirect, render_template, flash, request
 from flask_login import current_user, login_user, logout_user, current_user, login_required
 import sqlalchemy as sa
 from app.models import User, Event, Booking
-from app.forms import LoginForm, RegistrationForm, CreationForm, ResetPasswordRequestForm
+from app.forms import LoginForm, RegistrationForm, CreationForm, ResetPasswordRequestForm, ResetPasswordForm
 from urllib.parse import urlsplit
 from app.utils import admin_required
-from app.email import send_password_reset
+from app.email import send_password_reset_email
 
 @app.route('/')
 @app.route('/index')
@@ -193,7 +193,7 @@ def edit_event(event_id):
     return render_template('edit_event.html', event_id=event_id, form=form)
 
 
-@app.route('/reset_password', methods=['GET', 'POST'])
+@app.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -201,7 +201,23 @@ def reset_password_request():
     if reset_form.validate_on_submit():
         user = db.session.scalar(sa.select(User.email == reset_form.email.data))
         if user:
-            send_password_reset(user)
+            send_password_reset_email(user)
         flash('Check your email to follow instruction to reset the password')
         return redirect(url_for('login'))
     return render_template('reset_password_request.html', title='Reset Password', form=reset_form)
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    user = User.verify_reset_password_token(token)
+    if not user:
+        return redirect(url_for('index'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.set_password(form.pwd1.data)
+        db.session.commit()
+        flash('Your password has been reset.')
+        return redirect(url_for('login'))
+    return render_template('reset_password.html', form=form)
+
